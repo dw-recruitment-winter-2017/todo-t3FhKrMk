@@ -1,5 +1,5 @@
 (defproject dw-todo-exercise "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Democracy Works TODO application"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -62,20 +62,20 @@
               :output-dir "target/cljsbuild/public/js/out"
               :source-map true
               :optimizations :none
-              :pretty-print  true}}
+              :pretty-print  true}}}}
 
 
 
-            }
-   }
+
+
 
 
   :figwheel
   {:http-server-root "public"
    :server-port 3449
    :nrepl-port 7002
-   :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"
-                      ]
+   :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"]
+
    :css-dirs ["resources/public/css"]
    :ring-handler dw-todo-exercise.handler/app}
 
@@ -90,12 +90,12 @@
                                   [figwheel-sidecar "0.5.8"]
                                   [org.clojure/tools.nrepl "0.2.12"]
                                   [com.cemerick/piggieback "0.2.2-SNAPSHOT"]
-                                  [pjstadig/humane-test-output "0.8.1"]
-                                  ]
+                                  [pjstadig/humane-test-output "0.8.1"]]
+
 
                    :source-paths ["env/dev/clj"]
-                   :plugins [[lein-figwheel "0.5.8"]
-                             ]
+                   :plugins [[lein-figwheel "0.5.8"]]
+
 
                    :injections [(require 'pjstadig.humane-test-output)
                                 (pjstadig.humane-test-output/activate!)]
