@@ -6,7 +6,7 @@
             [config.core :refer [env]]))
 
 (def mount-target
-  [:div#app
+  [:div#app {:class "container"}
       [:h3 "ClojureScript has not been compiled!"]
       [:p "please run "
        [:b "lein figwheel"]
@@ -17,6 +17,12 @@
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport"
            :content "width=device-width, initial-scale=1"}]
+   [:link {:rel "stylesheet"
+           :href "//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"}]
+   [:link {:rel "stylesheet"
+           :href "//cdn.rawgit.com/necolas/normalize.css/master/normalize.css"}]
+   [:link {:rel "stylesheet"
+           :href "//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css"}]
    (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 (defn loading-page []

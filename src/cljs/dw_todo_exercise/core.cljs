@@ -2,18 +2,21 @@
     (:require [reagent.core :as reagent :refer [atom]]
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
-              [accountant.core :as accountant]))
+              [accountant.core :as accountant]
+              [dw-todo-exercise.todo :as todo]))
 
 ;; -------------------------
 ;; Views
 
 (defn home-page []
-  [:div [:h2 "Welcome to dw-todo-exercise"]
-   [:div [:a {:href "/about"} "go to about page"]]])
+  [:div [:h2 "Welcome to DW TODO"]
+   [:div [:a {:href "/about"} "about"]]
+   [:div [todo/todo-list]]])
 
 (defn about-page []
-  [:div [:h2 "About dw-todo-exercise"]
-   [:div [:a {:href "/"} "go to the home page"]]])
+  [:div [:h2 "DW TODO"]
+   [:p "This TODO application is for my job application to Democracy Works. It was fun!"]
+   [:div [:a {:href "/"} "home"]]])
 
 (defn current-page []
   [:div [(session/get :current-page)]])
