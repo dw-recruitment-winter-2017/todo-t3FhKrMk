@@ -11,6 +11,14 @@
 
 (def app-state (reagent/atom {}))
 
+(defn create [title]
+  (go
+   (let [created (<! (client/create title))]
+     (if (instance? js/Error created)
+       (swap! app-state assoc :error (.-message created))
+       (swap! app-state clojure.core/update :todo-list assoc (:id created)
+              created)))))
+
 (defn update [id todo]
   (go
    (let [updated (<! (client/update id todo))]
@@ -59,5 +67,15 @@
       [:p error-msg]])
    [:ol {:class "todo"}
     (for [todo (vals (:todo-list @app-state))]
-      ^{:key (:id todo)} [item todo])]])
+      ^{:key (:id todo)} [item todo])]
+   [:form {:on-submit (fn [e]
+                        (let [new-item (.getElementById js/document "new-item")
+                              new-item-title (.-value new-item)]
+                          (create new-item-title)
+                          (set! (.-value new-item) ""))
+                        (.preventDefault e))}
+    [:label {:for "new-item"} "Add TODO"]
+    [:input {:id "new-item"
+             :type "text"
+             :name "title"}]]])
 

@@ -16,18 +16,14 @@
        (:body response)
        (js/Error. "todo list failed to load")))))
 
-(defn get [id]
+(defn create [title]
   (go
-   (->> id
-        (str api-root "/todos/")
-        http/get
-        <!
-        :body
-        edn/read-string)))
-
-(defn create [todo]
-  (http/post (str api-root "/todos"
-                  {:edn-params todo})))
+   (let [response (<! (http/post (str api-root "/todos")
+                                 {:edn-params {:title title
+                                               :complete false}}))]
+     (if (= 201 (:status response))
+       (:body response)
+       (js/Error. (str "todo list item " title " failed to create"))))))
 
 (defn update [id todo]
   (go
