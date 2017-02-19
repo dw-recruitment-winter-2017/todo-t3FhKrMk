@@ -22,3 +22,7 @@ a.delete {
   cursor: pointer;
   color: red;
 }
+
+form.new-item input[type=submit] {
+  margin-left: 1rem;
+}

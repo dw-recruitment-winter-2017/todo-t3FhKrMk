@@ -68,14 +68,20 @@
    [:ol {:class "todo"}
     (for [todo (vals (:todo-list @app-state))]
       ^{:key (:id todo)} [item todo])]
-   [:form {:on-submit (fn [e]
+   [:form {:class "new-item"
+           :on-submit (fn [e]
                         (let [new-item (.getElementById js/document "new-item")
                               new-item-title (.-value new-item)]
                           (create new-item-title)
                           (set! (.-value new-item) ""))
                         (.preventDefault e))}
     [:label {:for "new-item"} "Add TODO"]
-    [:input {:id "new-item"
-             :type "text"
-             :name "title"}]]])
+    [:div {:class "row"}
+     [:input {:id "new-item"
+              :class "column column-90"
+              :type "text"
+              :name "title"}]
+     [:input {:type "submit"
+              :class "button column"
+              :value "Add"}]]]])
 
