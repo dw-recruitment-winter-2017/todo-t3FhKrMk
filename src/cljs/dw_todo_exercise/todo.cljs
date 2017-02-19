@@ -12,11 +12,13 @@
 (def app-state (reagent/atom {}))
 
 (defn update [id todo]
-  (swap! app-state update-in [:todo-list id] merge todo)
-  (client/update id todo))
+  (go
+   (let [updated (<! (client/update id todo))]
+     (if (instance? js/Error updated)
+       (swap! app-state assoc :error (.-message updated))
+       (swap! app-state update-in [:todo-list id] merge updated)))))
 
 (defn item [todo]
-  (println "Rendering item:" (pr-str todo))
   (let [checkbox-attrs {:type "checkbox"
                         :checked (:complete todo)
                         :on-change #(update
@@ -31,14 +33,21 @@
 (defn load-list [state]
   (go
    (let [list (<! (client/get-all))]
-     (swap! state assoc :todo-list
-            (reduce (fn [m i] (assoc m (:id i) i))
-                    {} list)))))
+     (if (instance? js/Error list)
+       (swap! state assoc :error (.-message list))
+       (swap! state assoc :todo-list
+              (reduce (fn [m i] (assoc m (:id i) i))
+                      {} list))))))=
 
 (defn list []
   (when (empty? (get @app-state :todo-list))
     (load-list app-state))
-  [:ol {:class "todo"}
-   (for [todo (vals (get @app-state :todo-list))]
-     ^{:key (:id todo)} [item todo])])
+  [:div {:id "todo-list"}
+   (when-let [error-msg (:error @app-state)]
+     [:div {:class "error"}
+      [:h2 "Error"]
+      [:p error-msg]])
+   [:ol {:class "todo"}
+    (for [todo (vals (:todo-list @app-state))]
+      ^{:key (:id todo)} [item todo])]])
 

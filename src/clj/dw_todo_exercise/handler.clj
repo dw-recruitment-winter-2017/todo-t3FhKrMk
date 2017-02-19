@@ -78,7 +78,8 @@
     (POST "/todos" req (todos/http-create req))
     (PUT "/todos/:id" [id :as req] (todos/http-update (keyword id) req))
     (DELETE "/todos/:id" [id] (todos/http-delete (keyword id)))
-    (GET "/todos/:id" [id] (todos/http-get (keyword id)))))
+    (GET "/todos/:id" [id] (todos/http-get (keyword id)))
+    (not-found {:error :not-found})))
 
 (def app-handler
   (-> #'site-routes

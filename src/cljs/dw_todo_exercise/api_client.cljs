@@ -12,8 +12,9 @@
 (defn get-all []
   (go
    (let [response (<! (http/get (str api-root "/todos")))]
-     (println "Response:" (pr-str response))
-     (:body response))))
+     (if (= 200 (:status response))
+       (:body response)
+       (js/Error. "todo list failed to load")))))
 
 (defn get [id]
   (go
@@ -25,13 +26,17 @@
         edn/read-string)))
 
 (defn create [todo]
-  (go (<! (http/post (str api-root "/todos"
-                          {:edn-params todo})))))
+  (http/post (str api-root "/todos"
+                  {:edn-params todo})))
 
 (defn update [id todo]
-  (http/put (str api-root "/todos/" (name id))
-            {:edn-params todo}))
+  (go
+    (let [response (<! (http/put (str api-root "/todos/" (name id))
+                                 {:edn-params todo}))]
+      (if (= 200 (:status response))
+        (:body response)
+        (js/Error. (str "todo list item " id " failed to update"))))))
 
 (defn delete [id]
-  (go (<! (http/delete (str api-root "/todos/" id)))))
+  (http/delete (str api-root "/todos/" id)))
 

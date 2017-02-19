@@ -10,3 +10,9 @@ ol.todo input[type=checkbox] {
 ol.todo li.complete {
   text-decoration: line-through;
 }
+
+div.error {
+  margin-top: 4rem;
+  color: red;
+  float: right;
+}
