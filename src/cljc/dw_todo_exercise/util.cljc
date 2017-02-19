@@ -1,6 +1,10 @@
-(ns dw-todo-exercise.util)
+(ns dw-todo-exercise.util
+  (:require [clojure.string :as str]))
 
-(defn foo-cljc [x]
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn title->id
+  "Converts TODO item titles to id's"
+  [title]
+  (-> title
+      (str/replace #"\s+" "-")
+      str/lower-case
+      keyword))

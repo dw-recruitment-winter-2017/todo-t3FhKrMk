@@ -11,7 +11,7 @@
 (defn home-page []
   [:div [:h2 "Welcome to DW TODO"]
    [:div [:a {:href "/about"} "about"]]
-   [:div [todo/todo-list]]])
+   [:div [todo/list]]])
 
 (defn about-page []
   [:div [:h2 "DW TODO"]
