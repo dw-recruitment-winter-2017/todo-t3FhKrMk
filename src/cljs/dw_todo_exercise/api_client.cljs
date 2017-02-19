@@ -38,5 +38,9 @@
         (js/Error. (str "todo list item " id " failed to update"))))))
 
 (defn delete [id]
-  (http/delete (str api-root "/todos/" id)))
+  (go
+   (let [response (<! (http/delete (str api-root "/todos/" (name id))))]
+     (if (= 200 (:status response))
+       (:body response)
+       (js/Error. (str "todo list item " id " failed to delete"))))))
 

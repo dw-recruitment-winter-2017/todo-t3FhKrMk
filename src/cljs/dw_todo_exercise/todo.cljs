@@ -18,17 +18,27 @@
        (swap! app-state assoc :error (.-message updated))
        (swap! app-state update-in [:todo-list id] merge updated)))))
 
+(defn delete [id]
+  (go
+   (let [deleted (<! (client/delete id))]
+     (if (instance? js/Error deleted)
+       (swap! app-state assoc :error (.-message deleted))
+       (swap! app-state clojure.core/update :todo-list dissoc id)))))
+
 (defn item [todo]
   (let [checkbox-attrs {:type "checkbox"
                         :checked (:complete todo)
                         :on-change #(update
                                      (:id todo)
                                      {:complete (not (:complete todo))})}]
-    [:li {:class (if (:complete todo)
-                   "complete"
-                   "incomplete")}
+    [:li {:class (str/join " " ["item" (if (:complete todo)
+                                         "complete"
+                                         "incomplete")])}
      [:input checkbox-attrs]
-     (:title todo)]))
+     [:span {:class "title"} (:title todo)]
+     [:a {:class "delete"
+          :on-click #(delete (:id todo))}
+      "X"]]))
 
 (defn load-list [state]
   (go
