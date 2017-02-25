@@ -7,8 +7,6 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:refer-clojure :exclude [list update]))
 
-(enable-console-print!)
-
 (def app-state (reagent/atom {}))
 
 (defn create [title]

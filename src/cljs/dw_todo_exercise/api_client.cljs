@@ -5,8 +5,6 @@
             [cljs.reader :as edn])
   (:refer-clojure :exclude [get update]))
 
-(enable-console-print!)
-
 (def api-root "/api")
 
 (defn get-all []
