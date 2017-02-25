@@ -41,6 +41,7 @@
 
   :source-paths ["src/clj" "src/cljc"]
   :resource-paths ["resources" "target/cljsbuild"]
+  :test-paths ["test/clj" "test/cljc"]
 
   :minify-assets
   {:assets
@@ -65,12 +66,6 @@
               :optimizations :none
               :pretty-print  true}}}}
 
-
-
-
-
-
-
   :figwheel
   {:http-server-root "public"
    :server-port 3449
@@ -79,8 +74,6 @@
 
    :css-dirs ["resources/public/css"]
    :ring-handler dw-todo-exercise.handler/app}
-
-
 
   :profiles {:dev {:repl-options {:init-ns dw-todo-exercise.repl
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
