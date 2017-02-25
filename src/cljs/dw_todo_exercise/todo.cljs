@@ -55,6 +55,24 @@
               (reduce (fn [m i] (assoc m (:id i) i))
                       {} list))))))
 
+(defn new-item []
+  [:form {:class "new-item"
+          :on-submit (fn [e]
+                       (let [new-item (.getElementById js/document "new-item")
+                             new-item-title (.-value new-item)]
+                         (create new-item-title)
+                         (set! (.-value new-item) ""))
+                       (.preventDefault e))}
+   [:label {:for "new-item"} "Add TODO"]
+   [:div {:class "row"}
+    [:input {:id "new-item"
+             :class "column column-90"
+             :type "text"
+             :name "title"}]
+    [:input {:type "submit"
+             :class "button column"
+             :value "Add"}]]])
+
 (defn list []
   (when (empty? (get @app-state :todo-list))
     (load-list app-state))
@@ -66,20 +84,4 @@
    [:ol {:class "todo"}
     (for [todo (sort-by :created-at (vals (:todo-list @app-state)))]
       ^{:key (:id todo)} [item todo])]
-   [:form {:class "new-item"
-           :on-submit (fn [e]
-                        (let [new-item (.getElementById js/document "new-item")
-                              new-item-title (.-value new-item)]
-                          (create new-item-title)
-                          (set! (.-value new-item) ""))
-                        (.preventDefault e))}
-    [:label {:for "new-item"} "Add TODO"]
-    [:div {:class "row"}
-     [:input {:id "new-item"
-              :class "column column-90"
-              :type "text"
-              :name "title"}]
-     [:input {:type "submit"
-              :class "button column"
-              :value "Add"}]]]])
-
+   [new-item]])
