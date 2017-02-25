@@ -7,7 +7,7 @@
 
 (enable-console-print!)
 
-(def api-root "http://localhost:3449/api")
+(def api-root "/api")
 
 (defn get-all []
   (go
