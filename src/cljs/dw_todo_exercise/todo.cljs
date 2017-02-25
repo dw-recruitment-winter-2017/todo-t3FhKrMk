@@ -66,7 +66,7 @@
       [:h2 "Error"]
       [:p error-msg]])
    [:ol {:class "todo"}
-    (for [todo (vals (:todo-list @app-state))]
+    (for [todo (sort-by :created-at (vals (:todo-list @app-state)))]
       ^{:key (:id todo)} [item todo])]
    [:form {:class "new-item"
            :on-submit (fn [e]

@@ -3,7 +3,7 @@
             [dw-todo-exercise.handler.app :as app]
             [clojure.string :as str]))
 
-(defonce db (atom (sorted-map)))
+(defonce db (atom {}))
 
 (def app
   (fn [req]

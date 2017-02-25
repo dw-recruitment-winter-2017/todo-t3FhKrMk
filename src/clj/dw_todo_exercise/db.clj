@@ -10,7 +10,8 @@
   return values of the write functions (a property that the write functions
   themselves take advantage of)."
   (:refer-clojure :exclude [get])
-  (:require [dw-todo-exercise.util :as util]))
+  (:require [dw-todo-exercise.util :as util])
+  (:import (java.util Date)))
 
 (defn get
   "Takes a `db` and `id` arg and returns the todo with the given id from the
@@ -24,7 +25,7 @@
   "Takes a `db` and returns all todos from it using
   `dw-todo-exercise.todos/get`. The db will be deref'd before it is accessed."
   [db]
-  (map #(get db %) (keys db)))
+  (vec (sort-by :created-at (map #(get db %) (keys db)))))
 
 (defn update!
   "Takes a `db`, `id`, and `todo` map args and updates the db by upserting the
@@ -41,8 +42,9 @@
   "Takes a `db` and a `todo` map and inserts it into the db using
   `dw-todo-exercise.db/update!`. Returns the new todo."
   [db todo]
-  (let [id (util/title->id (:title todo))]
-    (update! db id todo)))
+  (let [id (util/title->id (:title todo))
+        created-at (Date.)]
+    (update! db id (assoc todo :created-at created-at))))
 
 (defn delete!
   "Takes a `db` and an `id` of a todo and deletes the todo with that id from
