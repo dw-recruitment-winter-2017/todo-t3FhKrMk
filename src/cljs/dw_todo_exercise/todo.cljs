@@ -55,7 +55,7 @@
        (swap! state assoc :error (.-message list))
        (swap! state assoc :todo-list
               (reduce (fn [m i] (assoc m (:id i) i))
-                      {} list))))))=
+                      {} list))))))
 
 (defn list []
   (when (empty? (get @app-state :todo-list))
