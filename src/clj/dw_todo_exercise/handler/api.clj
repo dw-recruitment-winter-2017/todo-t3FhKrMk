@@ -8,20 +8,32 @@
             [dw-todo-exercise.middleware :refer [wrap-api-middleware]]
             [dw-todo-exercise.http :as http]))
 
-(defn allow-all-cors [req]
+(defn allow-all-cors
+  "Simple handler for allowing all CORS requests. Used for responding to
+  OPTIONS preflight requests."
+  [req]
   {:status 200
    :headers {"Access-Control-Allow-Methods" "GET POST PUT DELETE"
              "Access-Control-Allow-Origin" (get-in req [:headers "origin"])
              "Access-Control-Allow-Credentials" "true"}
    :body "preflight complete"})
 
-(defn wrap-allow-all-cors [handler]
+(defn wrap-allow-all-cors
+  "Ring middleware that allows all CORS requests. Obviously not appropriate
+  for anything real, but gets this coding exercise app up and running. Uses
+  `allow-all-cors` to generate the appropriate response headers."
+  [handler]
   (fn [req]
     (let [resp (handler req)
           cors-headers (:headers (allow-all-cors req))]
       (update resp :headers merge cors-headers))))
 
-(defn wrap-edn [handler]
+(defn wrap-edn
+  "Parses EDN request bodies and renders response bodies back into EDN (and
+  also sets the Content-Type header to application/edn). Allows all other
+  handlers to deal with request and response bodies as Clojure values instead
+  of parsing and rendering."
+  [handler]
   (fn [req]
     (let [content-type (get-in req [:headers "content-type"])
           response (if (and content-type (str/starts-with? content-type
