@@ -39,6 +39,6 @@
   (resources "/")
   (not-found "Not Found"))
 
-(def handler
+(def ring-handler
   (-> #'site-routes
       wrap-site-middleware))

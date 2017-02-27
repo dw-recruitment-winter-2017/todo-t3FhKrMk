@@ -57,7 +57,7 @@
     (GET "/todos/:id" [id :as req] (http/get (keyword id) req))
     (not-found {:error :not-found})))
 
-(def handler
+(def ring-handler
   (-> #'api-routes
       wrap-allow-all-cors
       wrap-edn

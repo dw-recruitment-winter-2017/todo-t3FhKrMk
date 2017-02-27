@@ -8,8 +8,8 @@
 (def app
   (fn [req]
     (if (str/starts-with? (:uri req) "/api/")
-      (api/handler (assoc req :db db))
-      (app/handler req))))
+      (api/ring-handler (assoc req :db db))
+      (app/ring-handler req))))
 
 
 
