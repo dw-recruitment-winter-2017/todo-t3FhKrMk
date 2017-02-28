@@ -49,7 +49,7 @@
           db (atom {})
           created (create! db todo)]
       (is (= todo
-             (dissoc (get @db (:id created)) :id))))))
+             (dissoc (get @db (:id created)) :id :created-at))))))
 
 (deftest delete!-test
   (testing "deletes the todo when it exists"

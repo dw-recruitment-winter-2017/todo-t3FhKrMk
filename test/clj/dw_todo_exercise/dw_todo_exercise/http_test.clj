@@ -18,7 +18,8 @@
       (is (= {:status 200
               :headers {}
               :body (assoc todo :id id)}
-             (get id {:db db}))))))
+             (clojure.core/update (get id {:db db})
+                                  :body dissoc :created-at))))))
 
 (deftest get-all-test
   (testing "returns empty success response w/ empty db"
@@ -36,7 +37,10 @@
       (is (= {:status 200
               :headers {}
               :body todos}
-             (get-all {:db db}))))))
+             (clojure.core/update (get-all {:db db})
+                                  :body
+                                  (fn [ts]
+                                    (map #(dissoc % :created-at) ts))))))))
 
 (deftest create-test
   (testing "returns success response when it adds the new TODO to the db"
@@ -46,9 +50,10 @@
       (is (= {:status 201
               :headers {"Location" (str "/api/todos/" (name id))}
               :body (assoc todo :id id)}
-             (create {:body todo, :db db})))
+             (clojure.core/update (create {:body todo, :db db})
+                                  :body dissoc :created-at)))
       (is (= todo
-             (dissoc (:body (get id {:db db})) :id)))))
+             (dissoc (:body (get id {:db db})) :id :created-at)))))
   (testing "returns a 500 error if creating throws exception"
     (is (= {:status 500
             :headers {}
